@@ -6,7 +6,7 @@ on:
       - "backend/**"
   pull_request:
     paths:
-      - "backend/**"
+      - "backend/**" 
 
 jobs:
   test-backend:
