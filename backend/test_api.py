@@ -3,12 +3,12 @@ from app import app, db, Todo
 
 class TodoApiTest(unittest.TestCase):
     def setUp(self):
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
-    app.config["TESTING"] = True
-    self.client = app.test_client()
-    with app.app_context():
-        db.drop_all()       
-        db.create_all()
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+        app.config["TESTING"] = True
+        self.client = app.test_client()
+        with app.app_context():
+            db.drop_all()       
+            db.create_all()
 
 
     def test_create_and_get_todo(self):
