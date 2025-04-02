@@ -3,7 +3,7 @@ name: Run Frontend Tests
 on:
   push:
     paths:
-      - "frontend/**" 
+      - "frontend/**"  
   pull_request:
     paths:
       - "frontend/**"
