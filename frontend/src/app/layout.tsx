@@ -1,7 +1,7 @@
 import './styles.css';
 
 export const metadata = {
-  title: 'Vanilla Todo App',
+  title: 'Full-Stack To Do App',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
