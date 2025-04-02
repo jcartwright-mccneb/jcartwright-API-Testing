@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "types": ["vitest", "node"],
+    "jsx": "preserve",
+    "types": [
+      "vitest",
+      "node"
+    ],
     "module": "esnext",
     "target": "es2017",
     "moduleResolution": "node",
