@@ -47,9 +47,9 @@ def create_todo():
     data = request.get_json()
 
     # Validate that "task" is included in the request
-    if not data or "task" not in data:
-        return jsonify({"error": "Missing 'task'"}), 400  # Return a bad request
-
+    if not data or "task" not in data or not data["task"].strip():
+        return jsonify({"error": "Task is required and cannot be empty"}), 400
+        
     # Create a new Todo object
     todo = Todo(task=data["task"])
 
