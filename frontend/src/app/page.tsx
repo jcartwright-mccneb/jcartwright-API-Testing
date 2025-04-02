@@ -8,15 +8,30 @@ interface Todo {
   completed: boolean;
 }
 
+type Filter = 'all' | 'active' | 'completed';
+
+const PRIORITY_OPTIONS = [
+  { label: '🔥 High', emoji: '🔥' },
+  { label: '✨ Medium', emoji: '✨' },
+  { label: '💤 Low', emoji: '💤' },
+];
+
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [task, setTask] = useState('');
+  const [priority, setPriority] = useState(PRIORITY_OPTIONS[1].emoji);
+  const [filter, setFilter] = useState<Filter>('all');
+  const [darkMode, setDarkMode] = useState(false);
 
   const API = 'http://localhost:5000/api/todos';
 
   useEffect(() => {
     fetchTodos();
   }, []);
+
+  useEffect(() => {
+    document.body.className = darkMode ? 'dark' : '';
+  }, [darkMode]);
 
   async function fetchTodos() {
     const res = await fetch(API);
@@ -29,7 +44,7 @@ export default function Home() {
     await fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ task }),
+      body: JSON.stringify({ task: `${priority} ${task}` }),
     });
     setTask('');
     fetchTodos();
@@ -49,74 +64,80 @@ export default function Home() {
     fetchTodos();
   }
 
+  function filteredTodos() {
+    switch (filter) {
+      case 'active':
+        return todos.filter((t) => !t.completed);
+      case 'completed':
+        return todos.filter((t) => t.completed);
+      default:
+        return todos;
+    }
+  }
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 flex items-center justify-center p-4">
-      <div className="bg-white/30 backdrop-blur-lg shadow-xl rounded-xl p-8 w-full max-w-xl">
-        
-        {/* Header */}
-        <div className="flex flex-col items-center text-center mb-6">
-          <div className="flex items-center gap-3 mb-2">
-            <img src="/file.svg" alt="Todo Icon" className="w-8 h-8" />
-            <h1 className="text-4xl font-extrabold text-white drop-shadow-md">
-              Todo List
-            </h1>
-          </div>
-          
-          {/* Minimalistic divider line */}
-          <div className="w-24 h-0.5 bg-white/50 rounded-full" />
-        </div>
+    <div className="container">
+      <h1>Todo List</h1>
+      <p className="sub">Stay focused, stay cool.</p>
 
-        {/* Input + Add */}
-        <div className="flex gap-2 mb-6">
-          <input
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-            placeholder="Add a new task..."
-            className="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-white/70 shadow-sm bg-white/80 backdrop-blur placeholder-gray-500"
-          />
-          <button
-            onClick={addTodo}
-            className="px-4 py-2 bg-white text-pink-600 font-semibold rounded-lg shadow hover:bg-pink-100 transition"
-          >
-            Add
-          </button>
-        </div>
+      <button onClick={() => setDarkMode((prev) => !prev)} style={{ float: 'right', marginBottom: '1rem' }}>
+        {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+      </button>
 
-        {/* Todo list */}
-        <ul className="space-y-3">
-          {todos.map((todo) => (
-            <li
-              key={todo.id}
-              className="flex justify-between items-center px-4 py-3 bg-white/60 border border-white/40 rounded-lg shadow backdrop-blur hover:shadow-lg transition"
-            >
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={todo.completed}
-                  onChange={() => toggleTodo(todo.id, !todo.completed)}
-                  className="h-5 w-5 accent-pink-600"
-                />
-                <span
-                  className={`text-lg ${
-                    todo.completed
-                      ? 'line-through text-gray-500'
-                      : 'text-gray-800'
-                  }`}
-                >
-                  {todo.task}
-                </span>
-              </div>
-              <button
-                onClick={() => deleteTodo(todo.id)}
-                className="text-red-600 hover:text-red-800 transition text-lg"
-                title="Delete"
-              >
-                ✕
-              </button>
-            </li>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          addTodo();
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Add something awesome..."
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+        />
+        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+          {PRIORITY_OPTIONS.map((opt) => (
+            <option key={opt.emoji} value={opt.emoji}>
+              {opt.label}
+            </option>
           ))}
-        </ul>
+        </select>
+        <button type="submit">Add</button>
+      </form>
+
+      <div className="filters">
+        {(['all', 'active', 'completed'] as Filter[]).map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={filter === f ? 'active' : ''}
+          >
+            {f.charAt(0).toUpperCase() + f.slice(1)}
+          </button>
+        ))}
       </div>
-    </main>
+
+      <ul className="todo-list">
+        {filteredTodos().map((todo) => (
+          <li
+            key={todo.id}
+            className={`todo-item ${todo.completed ? 'completed' : ''}`}
+          >
+            <label style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => toggleTodo(todo.id, !todo.completed)}
+              />
+              <span className="text">{todo.task}</span>
+            </label>
+            <button onClick={() => deleteTodo(todo.id)} title="Delete">
+              ✕
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
