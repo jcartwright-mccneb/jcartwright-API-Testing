@@ -80,10 +80,6 @@ export default function Home() {
       <h1>Todo List</h1>
       <p className="sub">Stay focused, stay cool.</p>
 
-      <button onClick={() => setDarkMode((prev) => !prev)} style={{ float: 'right', marginBottom: '1rem' }}>
-        {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-      </button>
-
       <form
         onSubmit={(e) => {
           e.preventDefault();
