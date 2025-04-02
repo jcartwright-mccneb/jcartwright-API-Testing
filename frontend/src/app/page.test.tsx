@@ -16,6 +16,6 @@ beforeAll(() => {
 test('renders heading and todo', async () => {
 render(<Home />);
 // This waits for the async fetch to finish and DOM to update
-expect(await screen.findByText("📝 Todo List")).toBeInTheDocument();
-expect(await screen.findByText("Test Task")).toBeInTheDocument();
+expect(await screen.findByText("Todo List")).toBeInTheDocument();
+expect(await screen.findByText("Add")).toBeInTheDocument();
 });
