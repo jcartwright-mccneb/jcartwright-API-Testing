@@ -1,0 +1,159 @@
+/* Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Root Theme Vars */
+  :root {
+    --bg: linear-gradient(to bottom right, #e0c3fc, #8ec5fc);
+    --text: #1a1a1a;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --border: rgba(0, 0, 0, 0.1);
+  }
+  
+  body.dark {
+    --bg: linear-gradient(to bottom right, #1e1e2f, #3c3c4c);
+    --text: #fff;
+    --card-bg: rgba(0, 0, 0, 0.4);
+    --border: rgba(255, 255, 255, 0.2);
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(ellipse at top left, #0f0c29, #302b63, #24243e);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.5s ease;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0;
+  }  
+  
+  .container {
+    max-width: 600px;
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    transition: background 0.3s, color 0.3s;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  p.sub {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+  }
+  
+  form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  input[type="text"],
+  select {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 1rem;
+  }
+  
+  button {
+    background: #ff4d6d;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s ease;
+  }
+  
+  button:hover {
+    background: #e63950;
+  }
+  
+  .filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .filters button {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .filters button.active {
+    background: #ff4d6d;
+    color: white;
+  }
+  
+  .todo-list {
+    list-style: none;
+    margin-top: 1rem;
+  }
+  
+  .todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+    transition: background 0.2s;
+  }
+  
+  .todo-item:hover {
+    background: rgba(255, 255, 255, 0.6);
+  }
+  
+  .todo-item .text {
+    flex: 1;
+    margin-left: 0.5rem;
+  }
+  
+  .todo-item.completed .text {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  
+  .todo-item button {
+    background: transparent;
+    border: none;
+    color: #e63950;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
