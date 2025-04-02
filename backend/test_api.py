@@ -1,23 +1,30 @@
 import unittest
+from sqlalchemy import inspect
+from sqlalchemy.orm.exc import NoResultFound
 from app import app, db, Todo  # Import the Flask app, DB instance, and model from the app module
 
 # Define a class for API tests using Python's built-in unittest framework
 class TodoApiTest(unittest.TestCase):
 
     def setUp(self):
-        """
-        Runs before each test case. Sets up a fresh in-memory SQLite database
-        and a test client to simulate API requests.
-        """
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"  # Use in-memory DB (fresh for every test)
-        app.config["TESTING"] = True  # Enable testing mode (better error handling/logs)
-        self.client = app.test_client()  # Flask's test client simulates HTTP requests
+        # Configure test database
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+        app.config["TESTING"] = True
 
-        # Create all tables inside the application context
-        with app.app_context():
-            db.drop_all()    # Drop any existing schema (clean reset)
-            db.create_all()  # Recreate the schema fresh for this test
+        # Create and push an app context
+        self.app_context = app.app_context()
+        self.app_context.push()
 
+        # Create test client and initialize schema
+        self.client = app.test_client()
+        db.drop_all()
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.engine.dispose()  # Force close any lingering SQLite connections
+        self.app_context.pop()
+    
     def test_create_and_get_todo(self):
         """
         Test the creation of a todo and then retrieving it via GET.
